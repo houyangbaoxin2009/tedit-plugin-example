@@ -25,7 +25,7 @@ and the host's static-assembly loop. Core lives in the sibling `tedit` repo.*
 
 * **装配形态**：静态装配式 —— 宿主入口 `import` 插件模块（tie 静态 import
   文本内联，tiec 编译期按装配裁剪未用模块，零运行时依赖）。动态加载（v2）
-  依赖 trm 引擎 Backend 接口，接口落地后另行定案。
+  待纯 tie 动态加载方案定案后另行开放。
 * **清单（manifest）**：插件仓根 `plugin.data.tie`（tie:data 明文，文件角色
   `tie<data>`，正文即 tie 表字面量；规范基准 tie-spec 20262 §17.1）。字段：
   `id` / `name` / `version` / `license` / `entry`。分发时可经

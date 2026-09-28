@@ -9,7 +9,7 @@ type tie<logic>
 // module provides the fixed-name hooks and is assembled by the host via
 // static import (v1 static-assembly form, zero runtime dependency).
 
-// 装载钩子：ctx 预留（v2 动态嵌入接 trm Backend 后承载宿主上下文）。
+// 装载钩子：ctx 预留（v2 动态嵌入方案定案后承载宿主上下文）。
 // 返回 0 表示装载成功。
 func plugin_on_load(ctx: i64) -> i64 {
     return 0
