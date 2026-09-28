@@ -46,11 +46,18 @@ fixed-name hooks + `cmd_<name>` handlers.*
 ## 文件
 
 ```
-plugin.data.tie        插件清单（tie:data）
+plugin.data.tie        插件清单（tie:data；含 extern 原生依赖声明字段）
 build.tsh.tie          构建驱动（tsh 角色：编译 demo host + 清单压缩为 zd）
 src/greet_plugin.tie   插件模块（钩子 + 命令处理器）
 src/demo_host.tie      v1 静态装配演示宿主（内核子集 + 插件回路）
+src/api|class|config|extern|script|ui|assets/   包布局占位（规范见核心仓
+                       tedit/docs/plugin-layout.md）
 ```
+
+## 插件包布局
+
+目录语义、extern 原生依赖规则、config 分层与 script 加载约定的规范基准在
+核心仓：`tedit/docs/plugin-layout.md`。
 
 ## 构建与运行
 

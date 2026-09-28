@@ -22,5 +22,6 @@
     "website": "",               // 可选
     "license": "TPL-2.2",        // 可选
     "icon": "",                  // 可选
+    "extern": [],                // 原生依赖（DLL 文件名列表；无则空表；布局规范 tedit/docs/plugin-layout.md §4）
     "entry": "src/greet_plugin.tie"
 ]
