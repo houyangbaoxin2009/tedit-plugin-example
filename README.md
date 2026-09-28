@@ -47,6 +47,7 @@ fixed-name hooks + `cmd_<name>` handlers.*
 
 ```
 plugin.data.tie        插件清单（tie:data）
+build.tsh.tie          构建驱动（tsh 角色：编译 demo host + 清单压缩为 zd）
 src/greet_plugin.tie   插件模块（钩子 + 命令处理器）
 src/demo_host.tie      v1 静态装配演示宿主（内核子集 + 插件回路）
 ```
@@ -56,9 +57,18 @@ src/demo_host.tie      v1 静态装配演示宿主（内核子集 + 插件回路
 需要同级克隆：`../tiec/`（编译器）与 `../tedit/`（内核）。
 
 ```sh
+<tshell>/src/tsh_main.exe -f build.tsh.tie    # src/demo_host.exe + plugin.zd
+```
+
+或直编：
+
+```sh
 ../tiec/compiler/tiec.exe src/demo_host.tie
 src/demo_host.exe
 ```
+
+`plugin.zd` 为清单的二进制分发形态（`tiec --compress-data` 产出，语义不变，
+gitignored，可随时从 `plugin.data.tie` 重建）。
 
 ## License
 

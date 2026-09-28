@@ -10,6 +10,17 @@
     "id": "example.greet",
     "name": "Greet",
     "version": "0.1.0",
-    "license": "TPL-2.2",
+    "core_version": 1,           // 用于依赖，每当有依赖破坏性更新，core_version加一
+    "open_source": true,         // 可选
+    "src_url": "",               // 如果开源
+    "author": [
+        "owner": "jiro",         // owner与company必填其一，也可都填
+        "company": "",           // owner与company必填其一，也可都填
+        "contributor": "jiro",   // 可选
+        "contributor_url": ""    // 可选，不依赖于contributor
+    ],
+    "website": "",               // 可选
+    "license": "TPL-2.2",        // 可选
+    "icon": "",                  // 可选
     "entry": "src/greet_plugin.tie"
 ]

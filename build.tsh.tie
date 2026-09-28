@@ -1,0 +1,29 @@
+type tie<tsh>
+// build.tsh.tie —— tedit-plugin-example (role tsh) build driver
+// usage: <tshell>/src/tsh_main.exe -f build.tsh.tie
+//        (set env TIE_BUILD_NOCACHE=1 to pass --no-cache to tiec)
+// Requires sibling checkouts of this repo:
+//   ../tiec/compiler/tiec.exe   (stage0 is enough)
+//   ../tedit/src/*.tie          (kernel modules, imported by demo host)
+// Builds:
+//   src\demo_host.exe           v1 static-assembly demo host
+//   plugin.zd                   manifest compiled to binary zd (tie:zd,
+//                               tie-spec 20262 §17.1, distribution form;
+//                               gitignored — rebuildable from plugin.data.tie)
+// NOTE(tsh-limitation): the tsh interp cannot issue a conditional `exit N`,
+// so on the tiec-missing / compile-fail path this logs the problem but the
+// process still returns 0.
+var root = cwd()
+var tiec = path_join(root, "..\\tiec\\compiler\\tiec.exe")
+if !file_exists(tiec) { println("[build] tiec stage0 not found: " + tiec) }
+if !file_exists(tiec) { println("[build] please clone tie-lang/tiec as a sibling of this repo.") }
+var opts = ""
+if get_env("TIE_BUILD_NOCACHE") == "1" { opts = "--no-cache " }
+println("[build] compiling src/demo_host.tie")
+var rc1 = exec_code("cd /d \"" + root + "\" && ..\\tiec\\compiler\\tiec.exe " + opts + "\"src/demo_host.tie\"")
+if rc1 != 0 { println("[build] compile failed: src/demo_host.tie (rc=" + to_string(rc1) + ")") }
+println("[build] compressing plugin.data.tie -> plugin.zd")
+var rc2 = exec_code("cd /d \"" + root + "\" && ..\\tiec\\compiler\\tiec.exe --compress-data \"plugin.data.tie\" -o \"plugin.zd\"")
+if rc2 != 0 { println("[build] compress failed: plugin.data.tie (rc=" + to_string(rc2) + ")") }
+println("[build] done: src\\demo_host.exe + plugin.zd")
+exit 0
