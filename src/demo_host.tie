@@ -1,0 +1,59 @@
+type tie<logic>
+import "./greet_plugin.tie"
+import "../../tedit/src/backend_interp.tie"
+import "../../tedit/src/lineedit.tie"
+import "../../tedit/src/complete.tie"
+import "../../tedit/src/command.tie"
+import "../../tedit/src/session.tie"
+import "../../tedit/src/render.tie"
+// src/demo_host.tie —— v1 静态装配演示宿主
+// --------------------------------------------------------------
+// 演示 tedit 内核 + 插件的完整装配回路（v1 静态装配式）：
+//   1. 装配 tedit 内核会话层子集（lineedit + complete + command + session +
+//      render，连带 backend_interp / observe / sh_util）；
+//   2. 经 tie:data 读取仓根 plugin.data.tie 清单（正文即 tie 表字面量，由
+//      interp 求值 —— tie-spec 20262 §17.1「解析由编译器背书」）；
+//   3. 插件装载 → 命令注册 → 命令分派 → 插件卸载。
+//
+// EN: v1 static-assembly demo host: tedit kernel session-layer subset +
+// plugin load (manifest read from plugin.data.tie via tie:data evaluation) →
+// command registration → dispatch → unload.
+
+func main() -> i64 {
+    session.ss_load()
+    println("[demo] tedit 内核装配：lineedit + complete + command + session + render")
+
+    // 1. 清单：tie:data 明文 → interp 求值（表字面量由编译器语法层背书）
+    var msrc = file_read("plugin.data.tie")
+    var meval = backend_interp.b_eval(msrc)
+    println("[demo] plugin.data.tie 求值：")
+    render.r_emit(meval)
+
+    // 2. 插件装载
+    var rc = plugin_on_load(0)
+    println("[demo] plugin_on_load rc=" + to_string(rc))
+
+    // 3. 命令注册与分派：插件命令优先于内核内建
+    var cmds = plugin_commands()
+    for c in cmds {
+        println("[demo] 注册插件命令: " + c)
+        var args = table_new_string()
+        table_push(args, c)
+        var out = cmd_hello(args)
+        render.r_emit(out)
+    }
+
+    // 4. 内核命令照常可用（ls 当前目录）
+    var toks = table_new_string()
+    table_push(toks, "ls")
+    var lsout = command.c_exec(toks)
+    println("[demo] 内核命令 ls 输出首行:")
+    render.r_emit(lsout)
+
+    // 5. 插件卸载
+    var urc = plugin_on_unload()
+    println("[demo] plugin_on_unload rc=" + to_string(urc))
+    session.ss_save()
+    println("[demo] 完成")
+    return 0
+}

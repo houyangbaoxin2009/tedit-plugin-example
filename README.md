@@ -1,0 +1,66 @@
+# tedit-plugin-example
+
+模块·插件·规范·示例
+
+*EN: tedit-plugin-example — the reference implementation of the tedit v1 plugin spec.*
+
+## 目录
+
+* [定位](#定位)
+* [插件规范 v1](#插件规范-v1)
+* [文件](#文件)
+* [构建与运行](#构建与运行)
+* [License](#license)
+
+## 定位
+
+tedit 插件规范 v1 的参考实现：最小示例插件 `example.greet`，演示清单声明、
+钩子约定与宿主静态装配的完整回路。tedit 核心见同级 `tedit` 仓。
+
+*EN: the reference implementation of the tedit v1 plugin spec — a minimal
+example plugin (`example.greet`) demonstrating the manifest, hook conventions
+and the host's static-assembly loop. Core lives in the sibling `tedit` repo.*
+
+## 插件规范 v1
+
+* **装配形态**：静态装配式 —— 宿主入口 `import` 插件模块（tie 静态 import
+  文本内联，tiec 编译期按装配裁剪未用模块，零运行时依赖）。动态加载（v2）
+  依赖 trm 引擎 Backend 接口，接口落地后另行定案。
+* **清单（manifest）**：插件仓根 `plugin.data.tie`（tie:data 明文，文件角色
+  `tie<data>`，正文即 tie 表字面量；规范基准 tie-spec 20262 §17.1）。字段：
+  `id` / `name` / `version` / `license` / `entry`。分发时可经
+  `tiec --compress-data plugin.data.tie -o plugin.zd` 单向编译为 zd（语义不变）。
+* **钩子**（固定命名导出）：
+  * `plugin_on_load(ctx: i64) -> i64` —— 装载；`ctx` 预留，0 为成功
+  * `plugin_on_unload() -> i64` —— 卸载；0 为成功
+  * `plugin_commands() -> table<string>` —— 注册命令名表
+  * 命令处理器约定命名 `cmd_<命令名>(args: table<string>) -> string`
+* **注意**：tie:data 正文即 tie 表字面量，**不支持尾逗号**（`..., ]` 报
+  E00000，与 JSONC 风格不同）。
+
+*EN: v1 static assembly (host imports plugin modules; unused modules trimmed
+at compile time); manifest = `plugin.data.tie` in tie:data plaintext
+(tie-spec 20262 §17.1; compressible to binary zd with identical semantics);
+fixed-name hooks + `cmd_<name>` handlers.*
+
+## 文件
+
+```
+plugin.data.tie        插件清单（tie:data）
+src/greet_plugin.tie   插件模块（钩子 + 命令处理器）
+src/demo_host.tie      v1 静态装配演示宿主（内核子集 + 插件回路）
+```
+
+## 构建与运行
+
+需要同级克隆：`../tiec/`（编译器）与 `../tedit/`（内核）。
+
+```sh
+../tiec/compiler/tiec.exe src/demo_host.tie
+src/demo_host.exe
+```
+
+## License
+
+以 [Tie Public License 2.2](https://github.com/tie-lang/TPL/blob/main/tpl.txt)
+（TPL 2.2）开源。

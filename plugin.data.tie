@@ -1,0 +1,15 @@
+// plugin.data.tie —— tedit 插件清单（tie:data 明文形态）
+// --------------------------------------------------------------
+// 文件角色 tie<data>，正文即 tie 表字面量（规范基准：tie-spec 20262 §17.1）。
+// 可读明文面向开发者与版本对比；分发时可经编译器单向压缩为 zd（语义不变）：
+//   tiec --compress-data plugin.data.tie -o plugin.zd
+// EN: tedit plugin manifest in tie:data plaintext form (file role tie<data>;
+// body is a bare tie table literal — tie-spec 20262 §17.1). Distributable as
+// binary zd via tiec --compress-data with identical semantics.
+[
+    "id": "example.greet",
+    "name": "Greet",
+    "version": "0.1.0",
+    "license": "TPL-2.2",
+    "entry": "src/greet_plugin.tie"
+]

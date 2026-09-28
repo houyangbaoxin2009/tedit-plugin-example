@@ -1,0 +1,33 @@
+type tie<logic>
+// src/greet_plugin.tie —— tedit 插件规范 v1 参考实现（最小示例）
+// --------------------------------------------------------------
+// 清单声明在仓根 plugin.data.tie（tie:data，tie-spec 20262 §17.1）；本模块
+// 提供固定命名钩子，由宿主经静态 import 装配（v1 静态装配式，零运行时依赖）。
+//
+// EN: reference implementation of the tedit v1 plugin spec (minimal example).
+// Manifest lives in plugin.data.tie (tie:data, tie-spec 20262 §17.1); this
+// module provides the fixed-name hooks and is assembled by the host via
+// static import (v1 static-assembly form, zero runtime dependency).
+
+// 装载钩子：ctx 预留（v2 动态嵌入接 trm Backend 后承载宿主上下文）。
+// 返回 0 表示装载成功。
+func plugin_on_load(ctx: i64) -> i64 {
+    return 0
+}
+
+// 卸载钩子。返回 0 表示卸载成功。
+func plugin_on_unload() -> i64 {
+    return 0
+}
+
+// 注册命令名表（宿主据此建立 命令名 → cmd_<命令名> 处理器绑定）。
+func plugin_commands() -> table<string> {
+    var c = table_new_string()
+    table_push(c, "hello")
+    return c
+}
+
+// 命令处理器：约定命名 cmd_<命令名>；args 为命令实参（首元素为命令名）。
+func cmd_hello(args: table<string>) -> string {
+    return "hello from tedit-plugin-example"
+}
