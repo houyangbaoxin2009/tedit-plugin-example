@@ -1,0 +1,31 @@
+type tie<logic>
+import "../../tedit/src/zip.tie"
+// src/pack_tool.tie —— .tedit 打包工具（example.greet 插件包）
+// --------------------------------------------------------------
+// 把 build/release 下的分发件组包为 .tedit（zip STORE 容器，规范基准：
+// tedit/docs/plugin-layout.md「分发形态」）：
+//   plugin.zd          清单二进制形态（tiec --compress-data 产出）
+//   plugin.data.tie    清单明文形态（人类可读对账）
+//   LICENSE
+// 包名草案约定：<id 的点换连字符>-<version>.tedit → example-greet-0.1.0.tedit。
+// 在仓库根运行（相对路径以根为基准）。
+//
+// EN: packs the release files into example-greet-0.1.0.tedit (zip STORE).
+// Run from the repo root.
+
+func main() -> i64 {
+    var zd = byte_read("build/release/plugin.zd")
+    var mf = byte_read("build/release/plugin.data.tie")
+    var lic = byte_read("build/release/LICENSE")
+    var names = table_new_string()
+    table_push(names, "plugin.zd")
+    table_push(names, "plugin.data.tie")
+    table_push(names, "LICENSE")
+    var datas: table<table<i64>> = []
+    table_push(datas, zd)
+    table_push(datas, mf)
+    table_push(datas, lic)
+    var rc = zip.zw_write("build/release/example-greet-0.1.0.tedit", names, datas)
+    println("pack rc=" + to_string(rc))
+    return rc
+}

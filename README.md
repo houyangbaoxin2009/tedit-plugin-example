@@ -73,9 +73,11 @@ src/api|class|config|extern|script|ui|assets/   包布局占位（规范见核�
 
 产物（**不进 src/**）：
 
-* `build/demo/` —— 演示包：`demo_host.exe` + `plugin.data.tie`
+* `build/demo/` —— 演示包：`demo_host.exe` + `pack_tool.exe` + `plugin.data.tie`
 * `build/release/` —— 分发包：`demo_host.exe` + `plugin.zd`（清单二进制形态）
-  + `plugin.data.tie` + `LICENSE`
+  + `plugin.data.tie` + `LICENSE` + **`example-greet-0.1.0.tedit`**（.tedit
+  插件包 = zip 容器，内含 plugin.zd / 明文清单 / LICENSE；命名草案
+  `<id 的点换连字符>-<version>.tedit`）
 
 或直编：
 

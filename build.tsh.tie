@@ -54,5 +54,13 @@ var rc2 = exec_code("cd /d \"" + root + "\" && ..\\tiec\\compiler\\tiec.exe --co
 if rc2 != 0 { println("[build] compress failed: plugin.data.tie (rc=" + to_string(rc2) + ")") }
 if !wait_for("build/release/plugin.zd") { println("[build] timeout: build/release/plugin.zd") }
 
-println("[build] done: build/demo -> demo_host.exe + plugin.data.tie; build/release -> demo_host.exe + plugin.zd + plugin.data.tie + LICENSE")
+println("[build] packing build/release/example-greet-0.1.0.tedit")
+var rc4 = exec_code("cd /d \"" + root + "\" && ..\\tiec\\compiler\\tiec.exe " + opts + "\"src/pack_tool.tie\" -o \"build\\demo\\pack_tool.exe\"")
+if rc4 != 0 { println("[build] pack_tool compile failed (rc=" + to_string(rc4) + ")") }
+if !wait_for("build/demo/pack_tool.exe") { println("[build] timeout: build/demo/pack_tool.exe") }
+var rc5 = exec_code("cd /d \"" + root + "\" && \"build\\demo\\pack_tool.exe\"")
+if rc5 != 0 { println("[build] pack failed (rc=" + to_string(rc5) + ")") }
+if !wait_for("build/release/example-greet-0.1.0.tedit") { println("[build] timeout: example-greet-0.1.0.tedit") }
+
+println("[build] done: build/demo -> demo_host.exe + pack_tool.exe + plugin.data.tie; build/release -> demo_host.exe + plugin.zd + plugin.data.tie + LICENSE + example-greet-0.1.0.tedit")
 exit 0
