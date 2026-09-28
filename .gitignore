@@ -8,3 +8,9 @@ rt_file*
 _tiec_verify/
 .tiec-cache/
 plugin.zd
+build/**
+!build/**/
+!build/**/.gitkeep
+test/**
+!test/**/
+!test/**/.gitkeep
