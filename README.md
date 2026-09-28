@@ -50,7 +50,8 @@ plugin.data.tie        插件清单（tie:data；含 extern 原生依赖声明�
 build.tsh.tie          构建驱动（tsh 角色：产物落 build/demo 与 build/release）
 build/demo/            演示包（demo_host.exe + plugin.data.tie）
 build/release/         分发包（demo_host.exe + plugin.zd + 清单 + LICENSE）
-test/                  测试（占位）
+test/                  测试工作区：测试用临时二进制、探针、脚本（内容
+                       gitignored，随时可清）
 src/greet_plugin.tie   插件模块（钩子 + 命令处理器）
 src/demo_host.tie      v1 静态装配演示宿主（内核子集 + 插件回路）
 src/api|class|config|extern|script|ui|assets/   包布局占位（规范见核心仓
