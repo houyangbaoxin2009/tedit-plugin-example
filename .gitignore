@@ -15,3 +15,4 @@ test/**
 !test/**/
 !test/**/.gitkeep
 *.tedit
+_local_only/

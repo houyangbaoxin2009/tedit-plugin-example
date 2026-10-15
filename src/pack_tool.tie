@@ -1,31 +1,39 @@
 type tie<logic>
-import "../../tedit/src/zip.tie"
-// src/pack_tool.tie —— .tedit 打包工具（example.greet 插件包）
+import "../../tlib/std/tzp.tie" as tzp
+// src/pack_tool.tie —— .tedit 打包工具（tzp 容器）
 // --------------------------------------------------------------
-// 把 build/release 下的分发件组包为 .tedit（zip STORE 容器，规范基准：
-// tedit/docs/plugin-layout.md「分发形态」）：
+// 把 build/release 下的分发件组包为 .tedit（tzp 归档容器，rANS 熵层）：
 //   plugin.zd          清单二进制形态（tiec --compress-data 产出）
 //   plugin.data.tie    清单明文形态（人类可读对账）
 //   LICENSE
-// 包名草案约定：<id 的点换连字符>-<version>.tedit → example-greet-0.1.0.tedit。
+// 包名约定：<id 的点换连字符>-<version>.tedit → example-greet-0.1.0.tedit。
 // 在仓库根运行（相对路径以根为基准）。
 //
-// EN: packs the release files into example-greet-0.1.0.tedit (zip STORE).
+// EN: packs the release files into example-greet-0.1.0.tedit (tzp container).
 // Run from the repo root.
 
 func main() -> i64 {
-    var zd = byte_read("build/release/plugin.zd")
-    var mf = byte_read("build/release/plugin.data.tie")
-    var lic = byte_read("build/release/LICENSE")
+    var zd = file_read("build/release/plugin.zd")
+    var mf = file_read("build/release/plugin.data.tie")
+    var lic = file_read("build/release/LICENSE")
     var names = table_new_string()
     table_push(names, "plugin.zd")
     table_push(names, "plugin.data.tie")
     table_push(names, "LICENSE")
-    var datas: table<table<i64>> = []
-    table_push(datas, zd)
-    table_push(datas, mf)
-    table_push(datas, lic)
-    var rc = zip.zw_write("build/release/example-greet-0.1.0.tedit", names, datas)
-    println("pack rc=" + to_string(rc))
-    return rc
+    var blobs = table_new_string()
+    table_push(blobs, zd)
+    table_push(blobs, mf)
+    table_push(blobs, lic)
+    var zp = tzp.tzp_pack(names, blobs, tzp.method_rans())
+    if len(zp) == 0 {
+        println("pack failed")
+        return 1
+    }
+    var out = "build/release/example-greet-0.1.0.tedit"
+    if !file_write(out, zp) {
+        println("pack write failed: " + out)
+        return 1
+    }
+    println("pack ok: " + out)
+    return 0
 }

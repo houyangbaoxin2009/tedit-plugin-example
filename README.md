@@ -65,7 +65,8 @@ src/api|class|config|extern|script|ui|assets/   包布局占位（规范见核�
 
 ## 构建与运行
 
-需要同级克隆：`../tiec/`（编译器）与 `../tedit/`（内核）。
+需要同级克隆：`../tiec/`（编译器）、`../tedit/`（内核）与 `../tlib/`
+（标准库：提供 tzp 打包）。
 
 ```sh
 <tshell>/src/tsh_main.exe -f build.tsh.tie
@@ -76,8 +77,8 @@ src/api|class|config|extern|script|ui|assets/   包布局占位（规范见核�
 * `build/demo/` —— 演示包：`demo_host.exe` + `pack_tool.exe` + `plugin.data.tie`
 * `build/release/` —— 分发包：`demo_host.exe` + `plugin.zd`（清单二进制形态）
   + `plugin.data.tie` + `LICENSE` + **`example-greet-0.1.0.tedit`**（.tedit
-  插件包 = zip 容器，内含 plugin.zd / 明文清单 / LICENSE；命名草案
-  `<id 的点换连字符>-<version>.tedit`）
+  插件包 = tzp 归档容器（rANS 熵层），内含 plugin.zd / 明文清单 / LICENSE；
+  命名 `<id 的点换连字符>-<version>.tedit`）
 
 或直编：
 
@@ -92,5 +93,4 @@ gitignored，可随时从 `plugin.data.tie` 重建）。构建驱动内 `exec_co
 
 ## License
 
-以 [Tie Public License 2.2](https://github.com/tie-lang/TPL/blob/main/tpl.txt)
-（TPL 2.2）开源。
+以 [Tie Public License 2.3](https://tpl.franj2.top/)（TPL 2.3）开源。
